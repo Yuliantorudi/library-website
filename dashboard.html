@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pengguna - Perpustakaan Digital</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="dashboard-navbar">
+        <div class="navbar-left">
+            <i class="fas fa-bars menu-toggle" id="menuToggle"></i>
+            <span class="logo">Perpustakaan Digital</span>
+        </div>
+        <div class="navbar-right">
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationBadge">3</span>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+            <div class="user-menu">
+                <img id="userAvatar" src="https://via.placeholder.com/40" alt="User Avatar" class="avatar">
+                <div class="user-dropdown">
+                    <a href="#profile">Profil</a>
+                    <a href="#settings">Pengaturan</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="menu-item active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#peminjaman" class="menu-item" data-section="peminjaman"><i class="fas fa-book"></i> Peminjaman Aktif</a></li>
+                <li><a href="#riwayat" class="menu-item" data-section="riwayat"><i class="fas fa-history"></i> Riwayat</a></li>
+                <li><a href="#denda" class="menu-item" data-section="denda"><i class="fas fa-exclamation-circle"></i> Denda</a></li>
+                <li><a href="#favorit" class="menu-item" data-section="favorit"><i class="fas fa-heart"></i> Buku Favorit</a></li>
+                <li><a href="#katalog" class="menu-item" data-section="katalog"><i class="fas fa-list"></i> Katalog Buku</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="dashboard-section active">
+                <h1>Selamat Datang, <span id="userName">Pengguna</span>!</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Sedang Dipinjam</h3>
+                        <p class="stat-number" id="activeBorrows">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Jatuh Tempo Segera</h3>
+                        <p class="stat-number" id="dueBooks">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-ban"></i>
+                        <h3>Denda Terhutang</h3>
+                        <p class="stat-number" id="pendingFines">Rp 0</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>Buku Favorit</h3>
+                        <p class="stat-number" id="favoriteBooks">0</p>
+                    </div>
+                </div>
+
+                <!-- Pengingat Pengembalian -->
+                <div class="reminder-section">
+                    <h2>Pengingat Pengembalian Buku</h2>
+                    <div id="reminderAlert" class="alert-box alert-info" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong id="reminderTitle">Perhatian!</strong>
+                            <p id="reminderMessage"></p>
+                        </div>
+                    </div>
+                    <div id="remindersContainer" class="reminders-grid">
+                        <!-- Reminders will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Peminjaman Aktif Section -->
+            <section id="peminjaman-section" class="dashboard-section">
+                <h2>Buku yang Sedang Dipinjam</h2>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Judul Buku</th>
+                                <th>Penulis</th>
+                                <th>Tanggal Peminjaman</th>
+                                <th>Tanggal Pengembalian</th>
+                                <th>Sisa Hari</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="peminjamanTable">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Riwayat Section -->
+            <section id="riwayat-section" class="dashboard-section">
+                <h2>Riwayat Peminjaman</h2>
+                <div class="filter-section">
+                    <input type="text" id="filterRiwayat" placeholder="Cari judul buku..." class="search-input">
+                    <select id="filterStatus" class="filter-select">
+                        <option value="">Semua Status</option>
+                        <option value="dikembalikan">Dikembalikan</option>
+                        <option value="terlambat">Terlambat</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Judul Buku</th>
+                                <th>Tanggal Peminjaman</th>
+                                <th>Tanggal Pengembalian</th>
+                                <th>Status</th>
+                                <th>Denda (jika ada)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riwayatTable">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Denda Section -->
+            <section id="denda-section" class="dashboard-section">
+                <h2>Daftar Denda</h2>
+                <div class="denda-summary">
+                    <div class="summary-card">
+                        <h3>Total Denda</h3>
+                        <p class="total-fine" id="totalFine">Rp 0</p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Judul Buku</th>
+                                <th>Tanggal Keterlambatan</th>
+                                <th>Jumlah Hari Terlambat</th>
+                                <th>Nominal Denda</th>
+                                <th>Status Pembayaran</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dendaTable">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Favorit Section -->
+            <section id="favorit-section" class="dashboard-section">
+                <h2>Buku Favorit Saya</h2>
+                <div class="book-grid" id="favoritGrid">
+                    <!-- Favorite books will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Katalog Section -->
+            <section id="katalog-section" class="dashboard-section">
+                <h2>Katalog Buku</h2>
+                <div class="filter-section">
+                    <input type="text" id="searchKatalog" placeholder="Cari buku..." class="search-input">
+                    <select id="filterCategory" class="filter-select">
+                        <option value="">Semua Kategori</option>
+                        <option value="fiksi">Fiksi</option>
+                        <option value="nonfiksi">Non-Fiksi</option>
+                        <option value="pelajaran">Pelajaran</option>
+                        <option value="teknologi">Teknologi</option>
+                    </select>
+                </div>
+                <div class="book-grid" id="katalogsGrid">
+                    <!-- Books will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notifikasi Toast -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Book Detail Modal -->
+    <div id="bookModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookModal()">&times;</span>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Buku">
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <p><strong>Penulis:</strong> <span id="modalAuthor"></span></p>
+                    <p><strong>Tahun:</strong> <span id="modalYear"></span></p>
+                    <p><strong>Kategori:</strong> <span id="modalCategory"></span></p>
+                    <p><strong>Deskripsi:</strong></p>
+                    <p id="modalDescription"></p>
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="borrowBtn" onclick="borrowBook()"><i class="fas fa-download"></i> Pinjam Buku</button>
+                        <button class="btn-secondary" id="favoriteBtn" onclick="toggleFavorite()"><i class="fas fa-heart"></i> Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/notifications.js"></script>
+</body>
+</html>
